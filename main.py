@@ -19,7 +19,9 @@ while True:
 
     choice = input("Enter your choice: ")
 
+    # Add Task
     if choice == "1":
+
         title = input("Enter task title: ")
 
         try:
@@ -29,48 +31,70 @@ while True:
         except ValueError as error:
             print(error)
 
+    # Display Tasks
     elif choice == "2":
+
         tasks = manager.display_tasks()
 
         if not tasks:
             print("No tasks available.")
 
-        for task in tasks:
-            status = "Completed" if task["completed"] else "Pending"
+        else:
+            for task in tasks:
 
-            print(
-                f'ID: {task["id"]} | '
-                f'Task: {task["title"]} | '
-                f'Status: {status}'
-            )
+                status = "Completed" if task["completed"] else "Pending"
 
+                print(
+                    f'ID: {task["id"]} | '
+                    f'Task: {task["title"]} | '
+                    f'Status: {status}'
+                )
+
+    # Complete Task
     elif choice == "3":
+
         try:
             task_id = int(input("Enter task ID: "))
 
-            if manager.complete_task(task_id):
+            tasks = manager.display_tasks()
+
+            selected_task = next(
+                (task for task in tasks if task["id"] == task_id),
+                None
+            )
+
+            if selected_task is None:
+                print("Task ID not found.")
+
+            elif selected_task["completed"]:
+                print("This task is already completed.")
+
+            elif manager.complete_task(task_id):
                 print("Task marked as completed.")
-            else:
-                print("Task not found or already completed.")
 
         except ValueError:
             print("Please enter a valid number.")
 
+    # Delete Task
     elif choice == "4":
+
         try:
             task_id = int(input("Enter task ID: "))
 
             if manager.delete_task(task_id):
                 print("Task deleted successfully.")
+
             else:
-                print("Task not found.")
+                print("Task ID not found.")
 
         except ValueError:
             print("Please enter a valid number.")
 
+    # Exit
     elif choice == "5":
+
         print("Thank you for using Student Task Manager!")
         break
 
     else:
-        print("Invalid choice. Try again.")
+        print("Invalid choice. Please try again.")
