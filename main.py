@@ -5,7 +5,6 @@ manager = TaskManager()
 
 
 def show_menu():
-
     print("\n===== STUDENT TASK MANAGER =====")
     print("1. Add Task")
     print("2. Display Tasks")
@@ -21,22 +20,22 @@ while True:
     choice = input("Enter your choice: ")
 
     if choice == "1":
-
         title = input("Enter task title: ")
 
-        task_id = manager.add_task(title)
+        try:
+            task_id = manager.add_task(title)
+            print(f"Task added successfully! ID: {task_id}")
 
-        print(f"Task added successfully! ID: {task_id}")
+        except ValueError as error:
+            print(error)
 
     elif choice == "2":
-
         tasks = manager.display_tasks()
 
         if not tasks:
             print("No tasks available.")
 
         for task in tasks:
-
             status = "Completed" if task["completed"] else "Pending"
 
             print(
@@ -46,20 +45,18 @@ while True:
             )
 
     elif choice == "3":
-
         try:
             task_id = int(input("Enter task ID: "))
 
             if manager.complete_task(task_id):
                 print("Task marked as completed.")
             else:
-                print("Task not found.")
+                print("Task not found or already completed.")
 
         except ValueError:
             print("Please enter a valid number.")
 
     elif choice == "4":
-
         try:
             task_id = int(input("Enter task ID: "))
 
@@ -72,10 +69,8 @@ while True:
             print("Please enter a valid number.")
 
     elif choice == "5":
-
         print("Thank you for using Student Task Manager!")
         break
 
     else:
-
         print("Invalid choice. Try again.")
